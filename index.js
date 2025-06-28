@@ -5,6 +5,9 @@ import cors from "cors";
 import jwt from "jsonwebtoken";
 import connectDB from "./utils/connectDB.js";
 
+//routes
+import userRoutes from "./routes/user.route.js"
+
 dotenv.config({});
 
 const app = express();
@@ -13,6 +16,9 @@ app.use(cors({ origin: "*" }));
 app.use(express.urlencoded({ extended: true }));
 
 const PORT = process.env.PORT || 8000;
+
+//api routes
+app.use("/api/user", userRoutes)
 
 app.listen(PORT, () => {
   connectDB();

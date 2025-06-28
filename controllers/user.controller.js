@@ -56,3 +56,62 @@ export const register = async (req, res) => {
     });
   }
 };
+
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    //validation
+    if (!email || !password) {
+      return res.status(400).json({
+        message: "Email and Password are required.",
+        success: false,
+      });
+    }
+
+    //checking if user with particular email exists or not
+    let user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({
+        message: "User not found.",
+        success: false,
+      });
+    }
+
+    //password matching
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(400).json({
+        message: "Invalid Credentials.",
+        success: false,
+      });
+    }
+
+    const accessToken = jwt.sign(
+      { userId: user._id },
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: "72h",
+      }
+    );
+
+    user = {
+      _id: user._id,
+      fullName: user.fullName,
+      email: user.email,
+    };
+
+    return res.status(200).json({
+      message: `Welcome ${user.fullName}`,
+      user,
+      success: true,
+      accessToken,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Server error during login",
+      success: false,
+    });
+  }
+};

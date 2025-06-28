@@ -7,6 +7,7 @@ import connectDB from "./utils/connectDB.js";
 
 //routes
 import userRoutes from "./routes/user.route.js"
+import taleRoutes from "./routes/tale.route.js"
 
 dotenv.config({});
 
@@ -19,6 +20,7 @@ const PORT = process.env.PORT || 8000;
 
 //api routes
 app.use("/api/user", userRoutes)
+app.use("/api/tale", taleRoutes)
 
 app.listen(PORT, () => {
   connectDB();

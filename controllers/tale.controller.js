@@ -17,25 +17,42 @@ export const addTale = async (req, res) => {
     const parsedVisitedDate = new Date(parseInt(visitedDate));
 
     const addTale = new Tale({
-        title,
-        tale,
-        visitedLocation,
-        userId,
-        imageUrl,
-        visitedDate: parsedVisitedDate,
-    })
+      title,
+      tale,
+      visitedLocation,
+      userId,
+      imageUrl,
+      visitedDate: parsedVisitedDate,
+    });
 
-    await addTale.save()
+    await addTale.save();
     return res.status(200).json({
-        message: "Tale Added Successfully.",
-        addTale,
-        success: true,
-    })
+      message: "Tale Added Successfully.",
+      addTale,
+      success: true,
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-        message: "Internal Server Error",
-        success: false,
+      message: "Internal Server Error",
+      success: false,
+    });
+  }
+};
+
+export const getAllTales = async (req, res) => {
+  try {
+    const {userId} = req.user
+
+    const tales = await Tale.find({userId: userId}).sort({isFavourite: -1})
+    res.status(200).json({
+      tales,
+      success: true,
     })
+  } catch (error) {
+    return res.status(500).json({
+      message: "Internal Server Error",
+      success: false,
+    });
   }
 };

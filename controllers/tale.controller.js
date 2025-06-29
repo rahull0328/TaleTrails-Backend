@@ -56,3 +56,4 @@ export const getAllTales = async (req, res) => {
     });
   }
 };
+

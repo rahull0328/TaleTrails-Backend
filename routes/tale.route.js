@@ -1,4 +1,4 @@
-import { addTale, getAllTales, editTale, deleteTale } from "../controllers/tale.controller.js";
+import { addTale, getAllTales, editTale, deleteTale, addToFavourites } from "../controllers/tale.controller.js";
 import express from "express";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
 import { singleUpload } from "../middlewares/multer.js";
@@ -9,5 +9,6 @@ router.route("/addTale").post(isAuthenticated, singleUpload, addTale);
 router.route("/getAllTales").get(isAuthenticated, getAllTales);
 router.route("/editTale/:id").put(isAuthenticated, editTale)
 router.route("/deleteTale/:id").delete(isAuthenticated, deleteTale)
+router.route("/addToFavourites/:id").put(isAuthenticated, addToFavourites)
 
 export default router;

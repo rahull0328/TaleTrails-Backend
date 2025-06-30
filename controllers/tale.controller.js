@@ -139,3 +139,33 @@ export const deleteTale = async (req, res) => {
     });
   }
 }
+
+export const addToFavourites = async (req, res) => {
+  const { id } = req.params;
+  const {isFavourite} = req.body
+  const { userId } = req.user;
+
+  try {
+
+    let isFavouriteTale = await Tale.findOne({ _id: id, userId: userId });
+    if (!isFavouriteTale) {
+      return res.status(404).json({
+        message: "Tale Not Found",
+        success: false,
+      })
+    }
+
+    isFavouriteTale.isFavourite = isFavourite
+
+    await isFavouriteTale.save()
+    res.status(200).json({
+      message: "Tale Added to Favourites Successfully.",
+    })
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      success: false,
+    });
+  }
+}

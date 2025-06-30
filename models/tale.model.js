@@ -23,9 +23,9 @@ const taleSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    imageUrl: {
+    image: {
       type: String,
-      required: true,
+      default: "",
     },
     visitedDate: {
       type: Date,

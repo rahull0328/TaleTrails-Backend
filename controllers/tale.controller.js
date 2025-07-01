@@ -202,3 +202,32 @@ export const searchTale = async (req, res) => {
     });
   }
 };
+
+export const filterTale = async (req, res) => {
+  const {startDate, endDate} = req.query
+  const {userId} = req.user
+
+  try {
+    
+    //converting startDate and endDate from milliseconds to proper Date
+    const start = new Date(parseInt(startDate))
+    const end = new Date(parseInt(endDate))
+
+    //finding tales which belongs to the authenticated used and falls within the date range
+    const filteredTales = await Tale.find({
+      userId: userId,
+      visitedDate: {$gte: start, $lte: end},
+    }).sort({isFavourite: -1})
+
+    return res.status(200).json({
+      filteredTales,
+      success: true,
+    })
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      success: false,
+    });
+  }
+}

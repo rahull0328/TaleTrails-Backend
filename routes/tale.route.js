@@ -1,4 +1,4 @@
-import { addTale, getAllTales, editTale, deleteTale, addToFavourites, searchTale } from "../controllers/tale.controller.js";
+import { addTale, getAllTales, editTale, deleteTale, addToFavourites, searchTale, filterTale } from "../controllers/tale.controller.js";
 import express from "express";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
 import { singleUpload } from "../middlewares/multer.js";
@@ -14,5 +14,6 @@ router.route("/deleteTale/:id").delete(isAuthenticated, deleteTale)
 //other functionalities
 router.route("/addToFavourites/:id").put(isAuthenticated, addToFavourites)
 router.route("/searchTale").get(isAuthenticated, searchTale)
+router.route("/filterTale").get(isAuthenticated, filterTale)
 
 export default router;

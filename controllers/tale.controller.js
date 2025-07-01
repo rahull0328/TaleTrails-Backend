@@ -125,12 +125,12 @@ export const deleteTale = async (req, res) => {
       });
     }
 
-    await deleteTale.deleteOne({_id: id, userId: userId})
+    await deleteTale.deleteOne({ _id: id, userId: userId });
 
     return res.status(200).json({
       message: "Tale Deleted Successfully.",
       success: true,
-    })
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
@@ -138,28 +138,61 @@ export const deleteTale = async (req, res) => {
       success: false,
     });
   }
-}
+};
 
 export const addToFavourites = async (req, res) => {
   const { id } = req.params;
-  const {isFavourite} = req.body
+  const { isFavourite } = req.body;
   const { userId } = req.user;
 
   try {
-
     let isFavouriteTale = await Tale.findOne({ _id: id, userId: userId });
     if (!isFavouriteTale) {
       return res.status(404).json({
         message: "Tale Not Found",
         success: false,
-      })
+      });
     }
 
-    isFavouriteTale.isFavourite = isFavourite
+    isFavouriteTale.isFavourite = isFavourite;
 
-    await isFavouriteTale.save()
+    await isFavouriteTale.save();
     res.status(200).json({
       message: "Tale Added to Favourites Successfully.",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      success: false,
+    });
+  }
+};
+
+export const searchTale = async (req, res) => {
+  const { query } = req.query;
+  const { userId } = req.user;
+
+  if (!query) {
+    return res.status(404).json({
+      message: "No query provided",
+      success: false,
+    });
+  }
+
+  try {
+    const searchResult = await Tale.find({
+      userId: userId,
+      $or: [
+        { title: { $regex: query, $options: "i" } },
+        { tale: { $regex: query, $options: "i" } },
+        {visitedLocation: {$regex: query, $options: "i"}},
+      ],
+    }).sort({isFavourite: -1});
+
+    return res.status(200).json({
+      searchResult,
+      success: true
     })
   } catch (error) {
     console.error(error);
@@ -168,4 +201,4 @@ export const addToFavourites = async (req, res) => {
       success: false,
     });
   }
-}
+};

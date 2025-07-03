@@ -130,3 +130,21 @@ export const logout = async (req, res) => {
     });
   }
 };
+
+export const getUserInfo = async (req, res) => {
+  const {userId} = req.user
+
+  const isUser = await User.findOne({_id: userId})
+
+  if(!isUser) {
+    return res.status(401).json({
+      message: "User not found",
+      success: false,
+    })
+  }
+
+  return res.status(200).json({
+    user: isUser,
+    message: "",
+  })
+}

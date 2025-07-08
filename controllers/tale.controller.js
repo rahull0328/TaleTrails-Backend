@@ -19,17 +19,17 @@ export const addTale = async (req, res) => {
     //converting milliseconds into proper Date
     const parsedVisitedDate = new Date(parseInt(visitedDate));
 
-    // //uploading the photo for tale
-    // const file = req.file
-    // const fileUri = getDataUri(file)
-    // const cloudResponse = await cloudinary.uploader.upload(fileUri.content)
+    //uploading the photo for tale
+    const file = req.file
+    const fileUri = getDataUri(file)
+    const cloudResponse = await cloudinary.uploader.upload(fileUri.content)
 
     const addTale = new Tale({
       title,
       tale,
       visitedLocation,
       userId,
-      // image: cloudResponse.secure_url,
+      image: cloudResponse.secure_url,
       visitedDate: parsedVisitedDate,
     });
 

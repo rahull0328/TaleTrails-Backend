@@ -8,7 +8,7 @@ const router = express.Router();
 //CRUD
 router.route("/addTale").post(isAuthenticated, singleUpload, addTale);
 router.route("/getAllTales").get(isAuthenticated, getAllTales);
-router.route("/editTale/:id").put(isAuthenticated, editTale)
+router.route("/editTale/:id").put(isAuthenticated, singleUpload, editTale)
 router.route("/deleteTale/:id").delete(isAuthenticated, deleteTale)
 
 //other functionalities
